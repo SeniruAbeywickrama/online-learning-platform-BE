@@ -25,21 +25,21 @@ const getAllEnrollments = async (req, res) => {
     try {
         const all_enrollments = await Enrollment.find();
 
-        let data = {
-            id : null,
-            user : null,
-            course : null
-        }
 
         let arr = [];
         for (let i=0;i < all_enrollments.length; i++){
+            let data = {
+                id : null,
+                user : null,
+                course : null
+            }
+
             const user = await Users.findOne({_id: all_enrollments[i].userId});
             const course = await Course.findOne({_id: all_enrollments[i].courseId});
 
             data.id = all_enrollments[i].id;
             data.user = user.name;
             data.course = course.name;
-
             arr.push(data)
         }
 

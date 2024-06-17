@@ -118,15 +118,16 @@ const userLogin = async (req, res) => {
         const { email, password } = req.body;
         const user = await Users.findOne({ email });
         if (!user) {
-            return res.status(401).json({ error: 'Authentication failed', code : 401 });
+            return res.status(200).json({ error: 'Email or password is wrong.', code : 401 });
         }
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
-            return res.status(401).json({ error: 'Authentication failed' , code : 401});
+            return res.status(200).json({ error: 'Wrong Password' , code : 402});
         }
-        const token = jwt.sign({ userId: user }, 'your-secret-key', {
-            expiresIn: '5h',
-        });
+        const token = jwt.sign({ user }, 'our-secret-key-el', {expiresIn: '5h'});
+
+        res.cookie("tokenELearning",token);
+
         res.status(200).json({ token : token , message : "Login successful", code : 200 });
     } catch (error) {
         res.status(500).json({ error: 'Login failed' });
