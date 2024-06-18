@@ -126,7 +126,7 @@ const userLogin = async (req, res) => {
         }
         const token = jwt.sign({ user }, 'our-secret-key-el', {expiresIn: '5h'});
 
-        res.cookie("tokenELearning",token);
+        res.cookie("tokene", token);
 
         res.status(200).json({ token : token , message : "Login successful", code : 200 });
     } catch (error) {

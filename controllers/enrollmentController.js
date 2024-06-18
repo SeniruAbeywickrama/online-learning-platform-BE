@@ -67,14 +67,15 @@ const getAllEnrollments = async (req, res) => {
 async function getAllEnrollment(){
     const all_enrollments = await Enrollment.find();
 
-    let data = {
-        id : null,
-        user : null,
-        course : null
-    }
+
 
     let arr = [];
     for (let i=0;i < all_enrollments.length; i++){
+        let data = {
+            id : null,
+            user : null,
+            course : null
+        }
         const user = await Users.findOne({_id: all_enrollments[i].userId});
         const course = await Course.findOne({_id: all_enrollments[i].courseId});
 
@@ -111,10 +112,54 @@ const deleteEnrollments = async (req, res) => {
     }
 }
 
+const getUserEnrollments = async (req, res) => {
+    try {
+        const myEnrollments = await Enrollment.find({userId: req.headers.id})
+        let arr = [];
+
+        for (let i=0;i < myEnrollments.length; i++){
+            let data = {
+                id : null,
+                user : null,
+                course : null
+            }
+            const user = await Users.findOne({_id: myEnrollments[i].userId});
+            const course = await Course.findOne({_id: myEnrollments[i].courseId});
+
+            data.id = myEnrollments[i].id;
+            data.user = user.name;
+            data.course = course.name;
+
+            arr.push(data)
+        }
+
+        if (myEnrollments.length > 0) {
+            res.status(200).json(
+                {
+                    message: 'Success',
+                    data : arr,
+                    code : 200
+                });
+        }else {
+            res.status(200).json(
+                {
+                    message: 'No enrollments.',
+                    data : arr,
+                    code : 201
+                });
+        }
+
+    } catch (e) {/*JSON*/
+        return res.status(500).json({error: e});
+    }
+}
+
+
 module.exports = {
     getAllEnrollments,
     createEnrollment,
-    deleteEnrollments
+    deleteEnrollments,
+    getUserEnrollments
 }
 
 

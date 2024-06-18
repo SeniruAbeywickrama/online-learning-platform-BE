@@ -14,10 +14,15 @@ const CourseRouter = require('./routes/courseRoute');
 const UserRouter = require('./routes/userRoute');
 const EnrollmentRouter = require('./routes/enrollmentRoute');
 
+const corsOptions = {
+    origin: 'http://localhost:3000/',  // Replace with your frontend domain
+    credentials: true,  // Allows the browser to send cookies
+};
 
 const app = express();
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
+
 
 
 // mongodb database
